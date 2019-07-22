@@ -5,5 +5,5 @@
 *.user
 *.nupkg
 *.dll
-obj/
-bin/
+*obj/
+*bin/
