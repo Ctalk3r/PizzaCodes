@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:PiCodes.Models;assembly=PiCodes"
+                  xmlns:views="clr-namespace:PiCodes.Views"
+                  mc:Ignorable="d"
+             x:Class="PiCodes.MainPage"
+             Title=" ">
+
+    <MasterDetailPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="local:ButtonWithHorizontalAlignment">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="TextColor" Value="#0F0F0F" />
+                <Setter Property="FontSize" Value="28" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <!--Setter Property="FontFamily" Value="MarkerFelt-Thin"/>-->
+                <Setter Property="HorizontalTextAlignment" Value="Start"/>
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0, 10, 0, 10"/>
+            </Style>
+        </ResourceDictionary>
+    </MasterDetailPage.Resources>
+
+    <MasterDetailPage.Detail>
+        <views:MainDetailPage/>
+    </MasterDetailPage.Detail>
+
+    <MasterDetailPage.Master>
+        <views:MainMasterPage/>
+    </MasterDetailPage.Master>
+
+</MasterDetailPage>

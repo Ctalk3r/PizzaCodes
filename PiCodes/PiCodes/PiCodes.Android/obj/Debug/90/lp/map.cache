@@ -1,4 +1,9 @@
+ExifLib
 FormsViewGroup
+Newtonsoft.Json
+PiCodes
+Plugin.Connectivity.Abstractions
+Plugin.Connectivity
 System.Runtime
 Xamarin.Android.Arch.Core.Common
 Xamarin.Android.Arch.Core.Runtime
@@ -44,3 +49,14 @@ Xamarin.Forms.Core
 Xamarin.Forms.Platform.Android
 Xamarin.Forms.Platform
 Xamarin.Forms.Xaml
+XLabs.Core
+XLabs.Forms
+XLabs.Forms.Droid
+XLabs.Ioc
+XLabs.Platform
+XLabs.Platform.Droid
+XLabs.Serialization
+netstandard
+System.Resources.ResourceManager
+System.ComponentModel
+System.Reflection.Extensions

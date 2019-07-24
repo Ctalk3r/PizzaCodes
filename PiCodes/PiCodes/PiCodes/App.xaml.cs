@@ -10,7 +10,10 @@ namespace PiCodes
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new MainPage())
+            {
+                BarBackgroundColor = Color.FromRgb(162, 85, 42)
+            };
         }
 
         protected override void OnStart()
