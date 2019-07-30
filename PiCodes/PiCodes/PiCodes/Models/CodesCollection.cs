@@ -20,20 +20,39 @@ namespace PiCodes.Models
     public class CodesCollection : ObservableCollection<Code>
     {
         public static string RequestAdress = "https://www.papajohns.by/api/stock/codes";
-        private bool isRefreshing;
-        public bool IsRefreshing => isRefreshing;
+
+        protected override event PropertyChangedEventHandler PropertyChanged;
+        private void RaisePropertyChanged([CallerMemberName]string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private bool isRefreshing = false;
+        public bool IsRefreshing
+        {
+            get => isRefreshing;
+
+            protected set
+            {
+                if (value != isRefreshing)
+                {
+                    isRefreshing = value;
+                    RaisePropertyChanged();
+
+                }
+            }
+        }
 
         string codesFile = "codes.txt";
         public CodesCollection()
         {
-            isRefreshing = false;
+            IsRefreshing = false;
         }
 
         public async Task<string> RefreshAsync()
         {
-            if (isRefreshing) return "";
+            if (IsRefreshing) return "";
             if (!CrossConnectivity.Current.IsConnected(0)) return "Нет подключения к сети";
-            isRefreshing = true;
+            IsRefreshing = true;
             Clear();
             HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(RequestAdress);
@@ -49,19 +68,19 @@ namespace PiCodes.Models
                     foreach (Match match in matches)
                     {
                         await AddCodeAsync(match);
-                    }            
-                    isRefreshing = false;
+                    }
+                    IsRefreshing = false;
                     return "Коды загружены";
                 }
                 else
                 {
-                    isRefreshing = false;
+                    IsRefreshing = false;
                     return "Кодов нет";
                 }
             }
             else
             {
-                isRefreshing = false;
+                IsRefreshing = false;
                 return "Не удалось загрузить коды";
             }
         }

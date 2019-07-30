@@ -11,20 +11,15 @@ using Xamarin.Forms;
 
 namespace PiCodes.ViewModels
 {
-    class MainPageViewModel : INotifyPropertyChanged
+    class MainPageViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
         public CodesCollection codes { get; set; }
         public ICommand RefreshButtonCommand { protected set; get; }
         public MainPageViewModel()
         {
             codes = new CodesCollection();
-            codes.Add(new Code("", ""));
+            //codes.Add(new Code("", ""));
             RefreshButtonCommand = new Command(OnRefreshButtonClicked);
-        }
-        protected void OnPropertyChanged([CallerMemberName]string propName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
         private async void OnRefreshButtonClicked(object sender)
         {
@@ -32,7 +27,7 @@ namespace PiCodes.ViewModels
             {
                 string mes = await codes.RefreshAsync();
                 //await codes.WriteCodes();
-                await Application.Current.MainPage.DisplayAlert("Информация", mes, "ОК");
+                await Application.Current.MainPage.DisplayAlert("Информация", codes.IsRefreshing.ToString(), "ОК");
             }
         }
 
