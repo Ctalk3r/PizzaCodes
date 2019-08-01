@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:PiCodes.Models"
              x:Class="PiCodes.Views.MainMasterPage"
-             Title=" ">
+             Padding="0,40,0,0"
+             IconImageSource="update_icon.png"
+			 Title="Personal Organiser">
     <ContentPage.Content>
         <FlexLayout Direction="Column" Padding="20,0,0,0" AlignContent="SpaceBetween">
             <local:ButtonWithHorizontalAlignment Text="Все"/>

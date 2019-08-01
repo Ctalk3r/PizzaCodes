@@ -7084,8 +7084,8 @@ namespace PiCodes.Droid
 			// aapt resource value: 0x7F090054
 			public const int abc_vector_test = 2131296340;
 			
-			// aapt resource value: 0x7F010312
-			public const int ad16 = 2130772754;
+			// aapt resource value: 0x7F010313
+			public const int ad16 = 2130772755;
 			
 			// aapt resource value: 0x7F090055
 			public const int avd_hide_password = 2131296341;
@@ -7093,8 +7093,8 @@ namespace PiCodes.Droid
 			// aapt resource value: 0x7F090056
 			public const int avd_show_password = 2131296342;
 			
-			// aapt resource value: 0x7F010313
-			public const int calendar_bg_selector = 2130772755;
+			// aapt resource value: 0x7F010314
+			public const int calendar_bg_selector = 2130772756;
 			
 			// aapt resource value: 0x7F090057
 			public const int design_bottom_navigation_item_background = 2131296343;
@@ -7767,6 +7767,9 @@ namespace PiCodes.Droid
 			
 			// aapt resource value: 0x7F090070
 			public const int tooltip_frame_light = 2131296368;
+			
+			// aapt resource value: 0x7F010003
+			public const int update_icon = 2130771971;
 			
 			static Drawable()
 			{

@@ -111,5 +111,16 @@ namespace PiCodes.Models
             string serialized = JsonConvert.SerializeObject(this);
             await DependencyService.Get<IFileWorker>().SaveTextAsync(codesFile, serialized);
         }
+
+        public async Task ReadCodes()
+        {
+            if (await DependencyService.Get<IFileWorker>().ExistsAsync(codesFile))
+            {
+                string text = await DependencyService.Get<IFileWorker>().LoadTextAsync(codesFile);
+                if (text == null) return;
+                foreach (var i in JsonConvert.DeserializeObject<CodesCollection>(text))
+                   Add(i);
+            }
+        }
     }
 }

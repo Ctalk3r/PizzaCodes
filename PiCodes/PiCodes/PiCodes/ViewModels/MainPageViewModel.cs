@@ -14,19 +14,22 @@ namespace PiCodes.ViewModels
     class MainPageViewModel
     {
         public CodesCollection codes { get; set; }
+        public string ToolbarIcon { get; set; }
         public ICommand RefreshButtonCommand { protected set; get; }
         public MainPageViewModel()
         {
             codes = new CodesCollection();
-            //codes.Add(new Code("", ""));
+            codes.ReadCodes();
             RefreshButtonCommand = new Command(OnRefreshButtonClicked);
         }
         private async void OnRefreshButtonClicked(object sender)
         {
             if (!codes.IsRefreshing)
             {
+                
                 string mes = await codes.RefreshAsync();
-                //await codes.WriteCodes();
+                await codes.WriteCodes();
+ 
                 await Application.Current.MainPage.DisplayAlert("Информация", codes.IsRefreshing.ToString(), "ОК");
             }
         }

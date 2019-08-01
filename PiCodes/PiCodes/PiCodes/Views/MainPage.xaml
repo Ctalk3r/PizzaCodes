@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:PiCodes.Models;assembly=PiCodes"
              xmlns:views="clr-namespace:PiCodes.Views"
-             x:Class="PiCodes.MainPage"
-             Title=" ">
+             x:Class="PiCodes.MainPage">
 
     <MasterDetailPage.Resources>
         <ResourceDictionary>
@@ -21,12 +20,17 @@
         </ResourceDictionary>
     </MasterDetailPage.Resources>
 
-    <MasterDetailPage.Detail>
-        <views:MainDetailPage/>
-    </MasterDetailPage.Detail>
-
     <MasterDetailPage.Master>
         <views:MainMasterPage/>
     </MasterDetailPage.Master>
+
+    <MasterDetailPage.Detail>
+        <NavigationPage>
+            <x:Arguments>
+                <views:MainDetailPage/>
+            </x:Arguments>
+        </NavigationPage>
+    </MasterDetailPage.Detail>
+
 
 </MasterDetailPage>
