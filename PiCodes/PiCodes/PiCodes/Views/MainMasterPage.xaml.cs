@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PiCodes.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace PiCodes.Views
         public MainMasterPage()
         {
             InitializeComponent();
+            this.BindingContext = new MainPageViewModel();
         }
     }
 }

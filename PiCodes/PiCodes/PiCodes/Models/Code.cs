@@ -62,17 +62,9 @@ namespace PiCodes.Models
             }
         }
 
-        public string Diameter
-        {
-            get
-            {
-                if (!IsPizza()) return "";
-                if (FullInfo.IndexOf("ТРАД", StringComparison.InvariantCultureIgnoreCase) != -1)
-                    return FullInfo.Substring(FullInfo.IndexOf("ТРАД", StringComparison.InvariantCultureIgnoreCase) - 2, 2) + "см";
-                else return FullInfo.Substring(FullInfo.IndexOf("ТОНК", StringComparison.InvariantCultureIgnoreCase) - 2, 2) + "см";
-            }
-        }
-        public double Price => double.Parse (FullInfo.Substring(FullInfo.LastIndexOf("От", StringComparison.InvariantCultureIgnoreCase) + 3, FullInfo.LastIndexOf("руб", StringComparison.InvariantCultureIgnoreCase) - (FullInfo.LastIndexOf("От", StringComparison.InvariantCultureIgnoreCase) + 4)), CultureInfo.InvariantCulture);
+        public string [] City { get; private set; }     
+        public string Diameter { get; private set; }     
+        public double Price { get; private set; }
         public string ShortInfo => $"{ShortName}";
         public string FullInfo => $"Имя - {Name}\nДоп. информация - {Note}";
 
@@ -107,6 +99,20 @@ namespace PiCodes.Models
             Name = string.Join("\n", temp);
             ShortName = temp.OrderBy((x) => x.Length).ToList()[0];
             Note = note;
+
+            Price = double.Parse(FullInfo.Substring(FullInfo.LastIndexOf("От", StringComparison.InvariantCultureIgnoreCase) + 3,
+                                 FullInfo.LastIndexOf("руб", StringComparison.InvariantCultureIgnoreCase) -
+                                (FullInfo.LastIndexOf("От", StringComparison.InvariantCultureIgnoreCase) + 4)), CultureInfo.InvariantCulture);
+
+            if (!IsPizza()) Diameter = "";
+            else
+            if (FullInfo.IndexOf("ТРАД", StringComparison.InvariantCultureIgnoreCase) != -1)
+                Diameter = FullInfo.Substring(FullInfo.IndexOf("ТРАД", StringComparison.InvariantCultureIgnoreCase) - 2, 2) + "см";
+            else Diameter = FullInfo.Substring(FullInfo.IndexOf("ТОНК", StringComparison.InvariantCultureIgnoreCase) - 2, 2) + "см";
+
+            City = FullInfo.Substring(FullInfo.LastIndexOf("-", StringComparison.InvariantCultureIgnoreCase) + 2).Split(',', '.');
+            for (int i = 0; i < City.Count(); i++)
+                City[i] = City[i].Trim();
         }
     }
 }

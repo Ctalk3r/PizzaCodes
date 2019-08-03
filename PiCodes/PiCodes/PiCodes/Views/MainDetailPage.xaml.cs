@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using PiCodes.ViewModels;
+using PiCodes.Models;
 
 namespace PiCodes.Views
 {
@@ -17,6 +18,12 @@ namespace PiCodes.Views
         {
             InitializeComponent();
             this.BindingContext = new MainPageViewModel();
+        }
+        private async void DisplayCode(object sender, ItemTappedEventArgs e)
+        {
+            Code code = e.Item as Code;
+            if(code != null)
+            await DisplayAlert("Информация", code.FullInfo, "ОК");
         }
     }
 }

@@ -54,6 +54,10 @@
               "target": "Package",
               "version": "[2.0.5782, )"
             },
+            "Xam.Plugin.Connectivity": {
+              "target": "Package",
+              "version": "[3.2.0, )"
+            },
             "Xamarin.Android.Support.Core.Utils": {
               "target": "Package",
               "version": "[28.0.0.1, )"
@@ -150,6 +154,10 @@
             "XLabs.Forms": {
               "target": "Package",
               "version": "[2.0.5782, )"
+            },
+            "Xam.Plugin.Connectivity": {
+              "target": "Package",
+              "version": "[3.2.0, )"
             },
             "Xamarin.Essentials": {
               "target": "Package",

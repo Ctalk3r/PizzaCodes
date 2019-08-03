@@ -7,7 +7,7 @@
 
     <MasterDetailPage.Resources>
         <ResourceDictionary>
-            <Style TargetType="local:ButtonWithHorizontalAlignment">
+            <Style TargetType="local:ButtonWithAlignment">
                 <Setter Property="BackgroundColor" Value="Transparent" />
                 <Setter Property="TextColor" Value="#0F0F0F" />
                 <Setter Property="FontSize" Value="28" />

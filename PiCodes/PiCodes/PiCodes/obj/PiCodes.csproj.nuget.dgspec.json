@@ -61,6 +61,10 @@
               "target": "Package",
               "version": "[2.0.5782, )"
             },
+            "Xam.Plugin.Connectivity": {
+              "target": "Package",
+              "version": "[3.2.0, )"
+            },
             "Xamarin.Essentials": {
               "target": "Package",
               "version": "[1.1.0, )"

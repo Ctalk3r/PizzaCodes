@@ -2,6 +2,7 @@
 using PiCodes.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -13,24 +14,26 @@ namespace PiCodes.ViewModels
 {
     class MainPageViewModel
     {
-        public CodesCollection codes { get; set; }
+        public CodesCollection Codes { get; set; }
         public string ToolbarIcon { get; set; }
+
         public ICommand RefreshButtonCommand { protected set; get; }
+
         public MainPageViewModel()
         {
-            codes = new CodesCollection();
-            codes.ReadCodes();
+            Codes = new CodesCollection();
+            Codes.ReadCodes();
             RefreshButtonCommand = new Command(OnRefreshButtonClicked);
         }
         private async void OnRefreshButtonClicked(object sender)
         {
-            if (!codes.IsRefreshing)
+            if (!Codes.IsRefreshing)
             {
                 
-                string mes = await codes.RefreshAsync();
-                await codes.WriteCodes();
+                string mes = await Codes.RefreshAsync();
+                await Codes.WriteCodes();
  
-                await Application.Current.MainPage.DisplayAlert("Информация", codes.IsRefreshing.ToString(), "ОК");
+                await Application.Current.MainPage.DisplayAlert("Информация", mes, "ОК");
             }
         }
 

@@ -5,11 +5,11 @@ using Xamarin.Forms;
 
 namespace PiCodes.Models
 {
-    public class ButtonWithHorizontalAlignment : Button
+    public class ButtonWithAlignment : Button
     {
         [Obsolete]
         public static BindableProperty HorizontalTextAlignmentProperty =
-            BindableProperty.Create<ButtonWithHorizontalAlignment, TextAlignment>
+            BindableProperty.Create<ButtonWithAlignment, TextAlignment>
             (x => x.HorizontalTextAlignment, TextAlignment.Center);
 
         [Obsolete]
@@ -21,7 +21,7 @@ namespace PiCodes.Models
 
         [Obsolete]
         public static BindableProperty VerticalTextAlignmentProperty =
-            BindableProperty.Create<ButtonWithHorizontalAlignment, TextAlignment>
+            BindableProperty.Create<ButtonWithAlignment, TextAlignment>
             (x => x.VerticalTextAlignment, TextAlignment.Center);
 
         [Obsolete]

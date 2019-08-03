@@ -9,12 +9,13 @@
     <StackLayout>
         <ListView x:Name="codesCollection" 
                                 HasUnevenRows="True"
-                                ItemsSource="{Binding codes}" 
+                                ItemsSource="{Binding Codes}" 
                                 IsPullToRefreshEnabled="True"
                                 RefreshCommand="{Binding RefreshButtonCommand}"
-                                IsRefreshing="{Binding codes.IsRefreshing}"
+                                IsRefreshing="{Binding Codes.IsRefreshing}"
                                 SeparatorColor="Black"
-                                RefreshControlColor="Beige">
+                                RefreshControlColor="Black"
+                                ItemTapped="DisplayCode">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>

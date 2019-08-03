@@ -18,17 +18,17 @@ using System.ComponentModel;
 using XLabs.Forms.Controls;
 using XLabs.Forms.Extensions;
 
-[assembly:ExportRenderer(typeof(ButtonWithHorizontalAlignment), typeof(ButtonWithHorizontalAlignmentRenderer))]
+[assembly:ExportRenderer(typeof(ButtonWithAlignment), typeof(ButtonWithAlignmentRenderer))]
 namespace PiCodes.Droid
 {
     [Obsolete]
-    public class ButtonWithHorizontalAlignmentRenderer : ButtonRenderer
+    public class ButtonWithAlignmentRenderer : ButtonRenderer
     {
-        public new ButtonWithHorizontalAlignment Element
+        public new ButtonWithAlignment Element
         {
             get
             {
-                return (ButtonWithHorizontalAlignment)base.Element;
+                return (ButtonWithAlignment)base.Element;
             }
         }
 
@@ -46,8 +46,8 @@ namespace PiCodes.Droid
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == ButtonWithHorizontalAlignment.VerticalTextAlignmentProperty.PropertyName ||
-                e.PropertyName == ButtonWithHorizontalAlignment.HorizontalTextAlignmentProperty.PropertyName)
+            if (e.PropertyName == ButtonWithAlignment.VerticalTextAlignmentProperty.PropertyName ||
+                e.PropertyName == ButtonWithAlignment.HorizontalTextAlignmentProperty.PropertyName)
             {
                 UpdateAlignment();
             }
@@ -56,7 +56,7 @@ namespace PiCodes.Droid
 
         private void UpdateAlignment()
         {
-            var element = this.Element as ButtonWithHorizontalAlignment;
+            var element = this.Element as ButtonWithAlignment;
 
             if (element == null || this.Control == null)
             {

@@ -20,7 +20,7 @@ namespace PiCodes.Models
     public class CodesCollection : ObservableCollection<Code>
     {
         public static string RequestAdress = "https://www.papajohns.by/api/stock/codes";
-
+        public ObservableCollection<string> CityList { get; set; }
         protected override event PropertyChangedEventHandler PropertyChanged;
         private void RaisePropertyChanged([CallerMemberName]string propertyName = null)
         {
@@ -37,7 +37,21 @@ namespace PiCodes.Models
                 {
                     isRefreshing = value;
                     RaisePropertyChanged();
+                }
+            }
+        }
 
+        private string city = "Все города";
+        public string City
+        {
+            get => city;
+
+            protected set
+            {
+                if (value != city)
+                {
+                    city = value;
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -46,14 +60,16 @@ namespace PiCodes.Models
         public CodesCollection()
         {
             IsRefreshing = false;
+            CityList = new ObservableCollection<string>();
         }
 
         public async Task<string> RefreshAsync()
         {
             if (IsRefreshing) return "";
-            if (!CrossConnectivity.Current.IsConnected(0)) return "Нет подключения к сети";
+            if (!CrossConnectivity.Current.IsConnected) return "Нет подключения к сети";
             IsRefreshing = true;
             Clear();
+            CityList.Clear();
             HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(RequestAdress);
             if (response.StatusCode == HttpStatusCode.OK)
@@ -103,7 +119,10 @@ namespace PiCodes.Models
                code = cur.Value.Substring(0, curLength - 3);
                note = output.Substring(curLength);
                note = note.Substring(0, note.Length - 1);
-               Add(new Code(Regex.Unescape(code), Regex.Unescape(note)));
+               Code temp = new Code(Regex.Unescape(code), Regex.Unescape(note));
+               Add(temp);
+               foreach (var city in temp.City)
+                   if (!CityList.Contains(city)) CityList.Add(city);
            });
         }
         public async Task WriteCodes()
@@ -119,7 +138,12 @@ namespace PiCodes.Models
                 string text = await DependencyService.Get<IFileWorker>().LoadTextAsync(codesFile);
                 if (text == null) return;
                 foreach (var i in JsonConvert.DeserializeObject<CodesCollection>(text))
-                   Add(i);
+                {
+                    Add(i);
+                    foreach(var city in i.City)
+                      if (!CityList.Contains(city)) CityList.Add(city);
+                }
+                    
             }
         }
     }
