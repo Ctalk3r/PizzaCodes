@@ -17,7 +17,6 @@ namespace PiCodes.Views
         public MainDetailPage()
         {
             InitializeComponent();
-            this.BindingContext = new MainPageViewModel();
         }
         private async void DisplayCode(object sender, ItemTappedEventArgs e)
         {

@@ -2,24 +2,35 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:PiCodes.Models"
+             xmlns:behaviors="clr-namespace:Behaviors;assembly=Behaviors"
              x:Class="PiCodes.Views.MainMasterPage"
              IconImageSource="update_icon.png"
 			 Title="Personal Organiser">
     <ContentPage.Content>
-        <FlexLayout Direction="Column" Padding="20,0,0,0" AlignContent="SpaceBetween">
-            <Image Margin="-20,0,0,0" Source="master_page_background" Aspect="Fill" HeightRequest="220"/>
-            <local:ButtonWithAlignment Text="Все"/>
-            <local:ButtonWithAlignment Text="Пиццы"/>
-            <local:ButtonWithAlignment Text="Скидки"/>
-            <local:ButtonWithAlignment Text="Другая еда"/>
-            <Picker
-                SelectedIndex="0"
+        <StackLayout Spacing="-12" Padding="-10, 0, -10, 0">
+            <Image Margin="0, 0, 0, 5" Source="master_page_background" Aspect="Fill" HeightRequest="220"/>
+            <local:ButtonWithAlignment x:Name="b1" Text="Все" Command="{Binding MasterMenuCommand}" CommandParameter="{Reference b1}"/>
+            <local:ButtonWithAlignment x:Name="b2" Text="Пиццы" Command="{Binding MasterMenuCommand}" CommandParameter="{Reference b2}"/>
+            <local:ButtonWithAlignment x:Name="b3" Text="Скидки" Command="{Binding MasterMenuCommand}" CommandParameter="{Reference b3}"/>
+            <local:ButtonWithAlignment x:Name="b4" Text="Другая еда" Command="{Binding MasterMenuCommand}" CommandParameter="{Reference b4}"/>
+            
+            <Picker x:Name="picker"
+                IsVisible="{Binding On}"
+                IsEnabled="{Binding On}"
                 ItemsSource="{Binding Codes.CityList}"
+                SelectedItem="{Binding Codes.CurrentCity}"
+                WidthRequest="262"
                 BackgroundColor="Transparent"
                 TextColor="#0F0F0F"
                 FontSize="28"
                 FontAttributes="Bold"
-                Margin="0, 10, 0, 10"/>
-        </FlexLayout>
+                Margin="-5, 10, 0, 10">
+                <Picker.Behaviors>
+                    <behaviors:EventHandlerBehavior EventName="SelectedIndexChanged">
+                        <behaviors:InvokeCommandAction Command="{Binding SelectCityCommand}" CommandParameter="{Reference picker}"/>
+                    </behaviors:EventHandlerBehavior>
+                </Picker.Behaviors>
+            </Picker>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

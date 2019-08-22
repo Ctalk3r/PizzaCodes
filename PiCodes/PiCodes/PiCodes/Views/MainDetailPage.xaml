@@ -2,11 +2,11 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PiCodes.Views.MainDetailPage"
-             Title=" ">
+             Title="{Binding Codes.Type}">
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="{Binding SortIcon}" Command="{Binding SortCommand}"/>
     </ContentPage.ToolbarItems>
-    <StackLayout>
+    <RelativeLayout>
         <ListView x:Name="codesCollection" 
                                 HasUnevenRows="True"
                                 ItemsSource="{Binding Codes}" 
@@ -19,20 +19,22 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <ViewCell.View>
-                            <StackLayout>
-                                <Label Text="{Binding Path=Name}"
-                                                       HeightRequest="50"
-                                                       VerticalOptions="Center"
-                                                       HorizontalOptions="Center"
-                                                       FontSize="Large"
-                                                       TextColor="Black"
-                                                       FontAttributes="Bold"/>
+                        <StackLayout Orientation="Horizontal" Margin="8, 0, 10, 0">
+                            <Image Source="launcher_foreground" WidthRequest="45" HeightRequest="60"/>
+                            <StackLayout Spacing="1" Margin="5, 4, 0, 8">
+                                <Label Text="{Binding ShortName}" FontSize="18" FontAttributes="Bold"/>
+                                <Label Text="{Binding ShortInfo}" />
                             </StackLayout>
-                        </ViewCell.View>
+                            <Label FontAttributes="Bold" WidthRequest="70" VerticalTextAlignment="Center" Text="{Binding Price, StringFormat='{0:F2}'}" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End"/>
+                        </StackLayout>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-    </StackLayout>
+        <Label IsVisible="{Binding Off}"  Text = "Потяните, чтобы обновить" LineBreakMode="NoWrap" BackgroundColor="Transparent"
+             RelativeLayout.XConstraint = "{ConstraintExpression Type=RelativeToParent, 
+             Property=Width, Factor=0.25, Constant=0}"
+              RelativeLayout.YConstraint = "{ConstraintExpression Type=RelativeToParent, 
+              Property=Height, Factor=0.4, Constant=0}"/>
+    </RelativeLayout>
 </ContentPage>

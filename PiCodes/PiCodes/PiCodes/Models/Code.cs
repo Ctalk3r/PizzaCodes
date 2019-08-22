@@ -15,7 +15,7 @@ namespace PiCodes.Models
         private string name, shortName, note;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
         private void RaisePropertyChanged([CallerMemberName]string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -28,7 +28,7 @@ namespace PiCodes.Models
 
         public string Name
         {
-            get{ return name; }
+            get { return name; }
             set
             {
                 if (name == value)
@@ -62,10 +62,10 @@ namespace PiCodes.Models
             }
         }
 
-        public string [] City { get; private set; }     
-        public string Diameter { get; private set; }     
+        public string[] City { get; private set; }
+        public string Diameter { get; private set; }
         public double Price { get; private set; }
-        public string ShortInfo => $"{ShortName}";
+        public string ShortInfo  { get; private set; }
         public string FullInfo => $"Имя - {Name}\nДоп. информация - {Note}";
 
         public bool IsPizza()
@@ -93,16 +93,15 @@ namespace PiCodes.Models
 
         public Code(string name, string note)
         {              
-            List<string> temp = name.Split(',').ToList();
+            List<string> temp = name.Split(',').ToList();     
             for (int i = 0; i < temp.Count(); i++)
                 temp[i] = temp[i].Trim();
             Name = string.Join("\n", temp);
             ShortName = temp.OrderBy((x) => x.Length).ToList()[0];
             Note = note;
-
             Price = double.Parse(FullInfo.Substring(FullInfo.LastIndexOf("От", StringComparison.InvariantCultureIgnoreCase) + 3,
                                  FullInfo.LastIndexOf("руб", StringComparison.InvariantCultureIgnoreCase) -
-                                (FullInfo.LastIndexOf("От", StringComparison.InvariantCultureIgnoreCase) + 4)), CultureInfo.InvariantCulture);
+                                (FullInfo.LastIndexOf("От", StringComparison.InvariantCultureIgnoreCase) + 4)).Replace(',','.'), CultureInfo.InvariantCulture);
 
             if (!IsPizza()) Diameter = "";
             else
@@ -113,6 +112,9 @@ namespace PiCodes.Models
             City = FullInfo.Substring(FullInfo.LastIndexOf("-", StringComparison.InvariantCultureIgnoreCase) + 2).Split(',', '.');
             for (int i = 0; i < City.Count(); i++)
                 City[i] = City[i].Trim();
+
+            ShortInfo = Note.Substring(0, Note.IndexOf("-", StringComparison.InvariantCultureIgnoreCase));
+            //ShortInfo = ShortInfo.Length < 25 ? ShortInfo : ShortInfo.Substring(0, 25) + "...";
         }
     }
 }

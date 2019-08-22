@@ -16,7 +16,6 @@ namespace PiCodes.Views
         public MainMasterPage()
         {
             InitializeComponent();
-            this.BindingContext = new MainPageViewModel();
         }
     }
 }

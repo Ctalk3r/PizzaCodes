@@ -14,6 +14,7 @@ using System.Runtime.CompilerServices;
 using PiCodes.Models;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace PiCodes.Models
 {
@@ -21,11 +22,16 @@ namespace PiCodes.Models
     {
         public static string RequestAdress = "https://www.papajohns.by/api/stock/codes";
         public ObservableCollection<string> CityList { get; set; }
+        public List<Code> SaveCodes;
         protected override event PropertyChangedEventHandler PropertyChanged;
-        private void RaisePropertyChanged([CallerMemberName]string propertyName = null)
+        public void RaisePropertyChanged([CallerMemberName]string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public string Type { get; set; } = "Все";
+
+        public string Diameter { get; set; } = "Все диаметры";
         private bool isRefreshing = false;
         public bool IsRefreshing
         {
@@ -41,7 +47,7 @@ namespace PiCodes.Models
             }
         }
 
-        private string city = "Все города";
+        private string city;
         public string City
         {
             get => city;
@@ -56,20 +62,43 @@ namespace PiCodes.Models
             }
         }
 
-        string codesFile = "codes.txt";
+        private string currentCity = "Все города";
+        public string CurrentCity
+        {
+            get => currentCity;
+
+            set
+            {
+                if (value != currentCity)
+                {
+                    currentCity = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        static string codesFile = "codes.json";
+        static string paramsFile = "params.txt";
+
         public CodesCollection()
         {
             IsRefreshing = false;
             CityList = new ObservableCollection<string>();
+            SaveCodes = new List<Code>();          
         }
 
         public async Task<string> RefreshAsync()
         {
             if (IsRefreshing) return "";
-            if (!CrossConnectivity.Current.IsConnected) return "Нет подключения к сети";
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                RaisePropertyChanged("IsRefreshing");
+                return "Нет подключения к сети";
+            }
             IsRefreshing = true;
             Clear();
-            CityList.Clear();
+            SaveCodes.Clear();
+            if(CityList.Count == 0) CityList.Add("Все города");
             HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(RequestAdress);
             if (response.StatusCode == HttpStatusCode.OK)
@@ -85,6 +114,7 @@ namespace PiCodes.Models
                     {
                         await AddCodeAsync(match);
                     }
+
                     IsRefreshing = false;
                     return "Коды загружены";
                 }
@@ -101,6 +131,17 @@ namespace PiCodes.Models
             }
         }
 
+        public void Sort(bool isReverse = false)
+        {
+            List<Code> sortedCodes;
+            if (isReverse == false)
+                sortedCodes = this.OrderBy(code => code.Price).ThenBy(code => code.Name).ToList();
+            else
+                sortedCodes = this.OrderByDescending(code => code.Price).ThenBy(code => code.Name).ToList();
+            Clear();
+            foreach (var i in sortedCodes)
+                Add(i);
+        }
         private async Task AddCodeAsync(Match match)
         {
            await Task.Run(() =>
@@ -120,30 +161,75 @@ namespace PiCodes.Models
                note = output.Substring(curLength);
                note = note.Substring(0, note.Length - 1);
                Code temp = new Code(Regex.Unescape(code), Regex.Unescape(note));
-               Add(temp);
-               foreach (var city in temp.City)
-                   if (!CityList.Contains(city)) CityList.Add(city);
+               if ((CurrentCity == null || temp.City.Contains(CurrentCity) || CurrentCity == "Все города") && 
+               ((Type == null) || (Type == "Все") || (Type == "Пиццы" && temp.IsPizza() && (temp.Diameter == Diameter || Diameter == "Все диаметры")) 
+               || (Type == "Скидки" && temp.IsDiscount()) || (Type == "Другая еда" && temp.IsSmthElse()))) Add(temp);
+               else SaveCodes.Add(temp);
+               Device.BeginInvokeOnMainThread(() =>
+               {
+                   if (temp.City.Count() != 0)
+                       foreach (var city in temp.City)
+                           if (!CityList.Contains(city)) CityList.Add(city);
+               });
            });
         }
+
+        private List<Code> tempStorage = new List<Code>();
         public async Task WriteCodes()
         {
+            tempStorage.Clear();
+            foreach (Code code in this)
+                tempStorage.Add(code);
+            if (SaveCodes.Count != 0)
+                foreach (var code in SaveCodes)
+                    Add(code);
+            Sort();
             string serialized = JsonConvert.SerializeObject(this);
             await DependencyService.Get<IFileWorker>().SaveTextAsync(codesFile, serialized);
+            Clear();
+            foreach (Code code in tempStorage)
+                Add(code);
+            
+        }
+        public async Task WriteParams()
+        {
+            await DependencyService.Get<IFileWorker>().SaveTextAsync(paramsFile, CurrentCity + ',' + Type + ',' + Diameter);        
         }
 
+        public async Task<bool> IsCodesFile()
+        {
+            return await DependencyService.Get<IFileWorker>().ExistsAsync(codesFile);
+        }
         public async Task ReadCodes()
         {
+            CurrentCity = "Все города";
             if (await DependencyService.Get<IFileWorker>().ExistsAsync(codesFile))
             {
                 string text = await DependencyService.Get<IFileWorker>().LoadTextAsync(codesFile);
                 if (text == null) return;
+                if (CityList.Count == 0) CityList.Add("Все города");
                 foreach (var i in JsonConvert.DeserializeObject<CodesCollection>(text))
                 {
-                    Add(i);
-                    foreach(var city in i.City)
-                      if (!CityList.Contains(city)) CityList.Add(city);
+                    foreach (var city in i.City)
+                        if (!CityList.Contains(city)) CityList.Add(city);
                 }
-                    
+
+                if (await DependencyService.Get<IFileWorker>().ExistsAsync(paramsFile))
+                { 
+                    string text2 = await DependencyService.Get<IFileWorker>().LoadTextAsync(paramsFile);
+                    string[] parameters = text2.Split(',');
+                    CurrentCity = parameters[0];
+                    Type = parameters[1];
+                    RaisePropertyChanged("Type");
+                    Diameter = parameters[2];
+                }
+                foreach (var i in JsonConvert.DeserializeObject<CodesCollection>(text))
+                {
+                    if ((i.City.Contains(CurrentCity) || i.City.Contains("Все города") || CurrentCity == "Все города") &&
+                       ((Type == null) || (Type == "Все") || (Type == "Пиццы" && i.IsPizza() && (i.Diameter == Diameter || Diameter == "Все диаметры"))
+                       || (Type == "Скидки" && i.IsDiscount()) || (Type == "Другая еда" && i.IsSmthElse()))) Add(i);
+                    else SaveCodes.Add(i);
+                }
             }
         }
     }

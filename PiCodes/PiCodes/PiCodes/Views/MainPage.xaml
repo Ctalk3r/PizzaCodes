@@ -8,14 +8,15 @@
     <MasterDetailPage.Resources>
         <ResourceDictionary>
             <Style TargetType="local:ButtonWithAlignment">
-                <Setter Property="BackgroundColor" Value="Transparent" />
                 <Setter Property="TextColor" Value="#0F0F0F" />
+                <Setter Property="BackgroundColor" Value="White"/>
                 <Setter Property="FontSize" Value="28" />
                 <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Padding" Value="25, 10, 0, 10"/>
+                <Setter Property="HeightRequest" Value="80"/>
                 <!--Setter Property="FontFamily" Value="MarkerFelt-Thin"/>-->
                 <Setter Property="HorizontalTextAlignment" Value="Start"/>
                 <Setter Property="VerticalTextAlignment" Value="Center"/>
-                <Setter Property="Margin" Value="0, 10, 0, 10"/>
             </Style>
         </ResourceDictionary>
     </MasterDetailPage.Resources>
