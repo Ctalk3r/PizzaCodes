@@ -23,6 +23,7 @@ namespace PiCodes.Models
         public static string RequestAdress = "https://www.papajohns.by/api/stock/codes";
         public ObservableCollection<string> CityList { get; set; }
         public List<Code> SaveCodes;
+        public List<Code> ReverseCodes;
         protected override event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged([CallerMemberName]string propertyName = null)
         {
@@ -85,6 +86,7 @@ namespace PiCodes.Models
             IsRefreshing = false;
             CityList = new ObservableCollection<string>();
             SaveCodes = new List<Code>();          
+            ReverseCodes = new List<Code>();          
         }
 
         public async Task<string> RefreshAsync()
@@ -109,12 +111,17 @@ namespace PiCodes.Models
                 Regex regex = new Regex(@"""name"":""\d+[^""]*""", RegexOptions.Compiled);
                 MatchCollection matches = regex.Matches(json);
                 if (matches.Count > 0)
-                { 
+                {
                     foreach (Match match in matches)
                     {
                         await AddCodeAsync(match);
                     }
-
+                    Sort();
+                    foreach (Code temp in SaveCodes)
+                        if ((CurrentCity == null || temp.City.Contains(CurrentCity) || CurrentCity == "Все города") &&
+                        ((Type == null) || (Type == "Все") || (Type == "Пиццы" && temp.IsPizza() && (temp.Diameter == Diameter || Diameter == "Все диаметры"))
+                        || (Type == "Скидки" && temp.IsDiscount()) || (Type == "Другая еда" && temp.IsSmthElse())))
+                            Add(temp);
                     IsRefreshing = false;
                     return "Коды загружены";
                 }
@@ -131,16 +138,29 @@ namespace PiCodes.Models
             }
         }
 
+        public static void Reverse(CodesCollection codes)
+        {
+            Code a;
+            for (int i = 0; i < codes.Count / 2; i++)
+            {
+                a = codes[i];
+                codes[i] = codes[codes.Count - i - 1];
+                codes[codes.Count - i - 1] = a;
+            }
+        }
+
+        public void FillReverse()
+        {
+            ReverseCodes = Enumerable.Reverse(SaveCodes).ToList();
+        }
+
         public void Sort(bool isReverse = false)
         {
-            List<Code> sortedCodes;
+
             if (isReverse == false)
-                sortedCodes = this.OrderBy(code => code.Price).ThenBy(code => code.Name).ToList();
+                SaveCodes = SaveCodes.OrderBy(code => code.Price).ThenBy(code => code.Name).ToList();
             else
-                sortedCodes = this.OrderByDescending(code => code.Price).ThenBy(code => code.Name).ToList();
-            Clear();
-            foreach (var i in sortedCodes)
-                Add(i);
+                SaveCodes = SaveCodes.OrderByDescending(code => code.Price).ThenBy(code => code.Name).ToList();
         }
         private async Task AddCodeAsync(Match match)
         {
@@ -161,10 +181,7 @@ namespace PiCodes.Models
                note = output.Substring(curLength);
                note = note.Substring(0, note.Length - 1);
                Code temp = new Code(Regex.Unescape(code), Regex.Unescape(note));
-               if ((CurrentCity == null || temp.City.Contains(CurrentCity) || CurrentCity == "Все города") && 
-               ((Type == null) || (Type == "Все") || (Type == "Пиццы" && temp.IsPizza() && (temp.Diameter == Diameter || Diameter == "Все диаметры")) 
-               || (Type == "Скидки" && temp.IsDiscount()) || (Type == "Другая еда" && temp.IsSmthElse()))) Add(temp);
-               else SaveCodes.Add(temp);
+               SaveCodes.Add(temp);
                Device.BeginInvokeOnMainThread(() =>
                {
                    if (temp.City.Count() != 0)
@@ -174,22 +191,10 @@ namespace PiCodes.Models
            });
         }
 
-        private List<Code> tempStorage = new List<Code>();
         public async Task WriteCodes()
         {
-            tempStorage.Clear();
-            foreach (Code code in this)
-                tempStorage.Add(code);
-            if (SaveCodes.Count != 0)
-                foreach (var code in SaveCodes)
-                    Add(code);
-            Sort();
-            string serialized = JsonConvert.SerializeObject(this);
-            await DependencyService.Get<IFileWorker>().SaveTextAsync(codesFile, serialized);
-            Clear();
-            foreach (Code code in tempStorage)
-                Add(code);
-            
+            string serialized = JsonConvert.SerializeObject(SaveCodes);
+            await DependencyService.Get<IFileWorker>().SaveTextAsync(codesFile, serialized);   
         }
         public async Task WriteParams()
         {
@@ -208,7 +213,7 @@ namespace PiCodes.Models
                 string text = await DependencyService.Get<IFileWorker>().LoadTextAsync(codesFile);
                 if (text == null) return;
                 if (CityList.Count == 0) CityList.Add("Все города");
-                foreach (var i in JsonConvert.DeserializeObject<CodesCollection>(text))
+                foreach (var i in JsonConvert.DeserializeObject<List<Code>>(text))
                 {
                     foreach (var city in i.City)
                         if (!CityList.Contains(city)) CityList.Add(city);
@@ -223,13 +228,15 @@ namespace PiCodes.Models
                     RaisePropertyChanged("Type");
                     Diameter = parameters[2];
                 }
+
                 foreach (var i in JsonConvert.DeserializeObject<CodesCollection>(text))
                 {
+                    SaveCodes.Add(i);
                     if ((i.City.Contains(CurrentCity) || i.City.Contains("Все города") || CurrentCity == "Все города") &&
                        ((Type == null) || (Type == "Все") || (Type == "Пиццы" && i.IsPizza() && (i.Diameter == Diameter || Diameter == "Все диаметры"))
                        || (Type == "Скидки" && i.IsDiscount()) || (Type == "Другая еда" && i.IsSmthElse()))) Add(i);
-                    else SaveCodes.Add(i);
                 }
+                FillReverse();
             }
         }
     }

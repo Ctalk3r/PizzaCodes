@@ -17,6 +17,12 @@ namespace PiCodes.ViewModels
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {
+        public static void swap<T>(ref T a, ref T b)
+        {
+            T c = a;
+            a = b;
+            b = c;
+        }
         public string ToolbarIcon { get; set; }
         private string sortIcon = "sort_by_ascending";
         public string SortIcon
@@ -26,8 +32,9 @@ namespace PiCodes.ViewModels
             {
                 if (sortIcon != value)
                 {
-                    sortIcon = value;
+                    sortIcon = value;              
                     RaisePropertyChanged();
+                    CodesCollection.Reverse(codes);
                 }
             }
         }
@@ -111,15 +118,9 @@ namespace PiCodes.ViewModels
         public void Sort(object sender)
         {
             if (SortIcon == "sort_by_descending")
-            {
-                codes.Sort();
                 SortIcon = "sort_by_ascending";
-            }
             else
-            {
-                codes.Sort(true);
                 SortIcon = "sort_by_descending";
-            }
         }
 
         private int flg = 0;
@@ -142,29 +143,33 @@ namespace PiCodes.ViewModels
                 await codes.WriteCodes();
                 if (codes.Count != 0) On = true;
                 if (codes.CurrentCity == null) codes.CurrentCity = "Все города";
-                if (SortIcon == "sort_by_descending") codes.Sort(true);
-                else codes.Sort();
+                if (SortIcon == "sort_by_descending") CodesCollection.Reverse(codes);
                 await Application.Current.MainPage.DisplayAlert("Информация", mes, "ОК");
+                codes.FillReverse();
             }
         }
         private async void MasterMenuClicked(object sender)
         {
-            
+            //var watch = System.Diagnostics.Stopwatch.StartNew();
+
             Button button = sender as Button;
             if (button == null) return;
-            if (codes.SaveCodes.Count != 0)
-                foreach (var code in codes.SaveCodes)
-                    codes.Add(code);
-            codes.SaveCodes.Clear();
+            
             if (button.Text == "Все")
             {
-                foreach (var code in codes)
-                    if (code.City.Count() != 0 && !code.City.Contains(codes.CurrentCity) && !code.City.Contains("Все города") && codes.CurrentCity != "Все города")
-                        codes.SaveCodes.Add(code);
-                var x = codes.Where(c => c.City.Contains(codes.CurrentCity) || c.City.Contains("Все города") || codes.CurrentCity == "Все города").ToList();
                 codes.Clear();
-                foreach (var code in x)
-                    codes.Add(code);
+                if (SortIcon == "sort_by_descending")
+                    foreach (var c in codes.ReverseCodes)
+                    {
+                        if (codes.CurrentCity == "Все города" || c.City.Contains(codes.CurrentCity) || c.City.Contains("Все города"))
+                            codes.Add(c);
+                    }
+                else
+                    foreach (var c in codes.SaveCodes)
+                    {
+                        if (codes.CurrentCity == "Все города" || c.City.Contains(codes.CurrentCity) || c.City.Contains("Все города"))
+                            codes.Add(c);
+                    }
             }
             else if(button.Text.StartsWith("Пиццы"))
             {
@@ -173,42 +178,68 @@ namespace PiCodes.ViewModels
                 else
                     diameter = button.Text.Substring(5, button.Text.Length - 5);
                 if (diameter == "Отмена") return;
-                codes.Diameter = diameter;
-                foreach (var code in codes)
-                    if (code.City.Count() != 0 && !code.City.Contains(codes.CurrentCity) && !code.City.Contains("Все города") && codes.CurrentCity != "Все города" || !code.IsPizza() || code.IsPizza() && code.Diameter != diameter && codes.Diameter != "Все диаметры")
-                        codes.SaveCodes.Add(code);
-                var x = codes.Where(c => (c.City.Contains(codes.CurrentCity) || c.City.Contains("Все города") || codes.CurrentCity == "Все города") && c.IsPizza() && (c.Diameter == diameter || codes.Diameter == "Все диаметры")).ToList();
                 codes.Clear();
-                foreach (var code in x)
-                    codes.Add(code);
+                codes.Diameter = diameter;
+
+                if (SortIcon == "sort_by_descending")
+                    foreach (var c in codes.ReverseCodes)
+                    {
+                        if (c.IsPizza() && (c.Diameter == diameter || codes.Diameter == "Все диаметры") && (codes.CurrentCity == "Все города" || c.City.Contains(codes.CurrentCity) || c.City.Contains("Все города")))
+                            codes.Add(c);
+                    }
+                else
+                    foreach (var c in codes.SaveCodes)
+                    {
+                        if (c.IsPizza() && (c.Diameter == diameter || codes.Diameter == "Все диаметры") && (codes.CurrentCity == "Все города" || c.City.Contains(codes.CurrentCity) || c.City.Contains("Все города")))
+                            codes.Add(c);
+                    }
             }
             else if(button.Text == "Скидки")
             {
-                foreach (var code in codes)
-                    if (code.City.Count() != 0 && !code.City.Contains(codes.CurrentCity) && !code.City.Contains("Все города") && codes.CurrentCity != "Все города" || !code.IsDiscount())
-                        codes.SaveCodes.Add(code);
-                var x = codes.Where(c => (c.City.Contains(codes.CurrentCity) || c.City.Contains("Все города") || codes.CurrentCity == "Все города") && c.IsDiscount()).ToList();
                 codes.Clear();
-                foreach (var code in x)
-                    codes.Add(code);
+                if (SortIcon == "sort_by_descending")
+                    foreach (var c in codes.ReverseCodes)
+                    {
+                        if (c.IsDiscount() && (codes.CurrentCity == "Все города" || c.City.Contains(codes.CurrentCity) || c.City.Contains("Все города")))
+                            codes.Add(c);
+                    }
+                else
+                foreach (var c in codes.SaveCodes)
+                    {
+                        if (c.IsDiscount() && (codes.CurrentCity == "Все города" || c.City.Contains(codes.CurrentCity) || c.City.Contains("Все города")))
+                            codes.Add(c);
+                    }
             }
             else if(button.Text == "Другая еда")
             {
-                foreach (var code in codes)
-                    if (code.City.Count() != 0 && !code.City.Contains(codes.CurrentCity) && !code.City.Contains("Все города") && codes.CurrentCity != "Все города"  || !code.IsSmthElse())
-                        codes.SaveCodes.Add(code);
-                var x = codes.Where(c => (c.City.Contains(codes.CurrentCity) || c.City.Contains("Все города") || codes.CurrentCity == "Все города") && c.IsSmthElse()).ToList();
                 codes.Clear();
-                foreach (var code in x)
-                    codes.Add(code);
+                if (SortIcon == "sort_by_descending")
+                    foreach (var c in codes.SaveCodes)
+                    {
+                        if (c.IsSmthElse() && (codes.CurrentCity == "Все города" || c.City.Contains(codes.CurrentCity) || c.City.Contains("Все города")))
+                            codes.Add(c);
+                    }
+                else
+                    foreach (var c in codes.SaveCodes)
+                    {
+                        if (c.IsSmthElse() && (codes.CurrentCity == "Все города" || c.City.Contains(codes.CurrentCity) || c.City.Contains("Все города")))
+                            codes.Add(c);
+                    }
             }
 
-            if (SortIcon == "sort_by_descending") codes.Sort(true);
-            else codes.Sort();
+            if (Xamarin.Forms.Application.Current.MainPage is MasterDetailPage masterDetailPage)
+            {
+                masterDetailPage.IsPresented = false;
+                //watch.Stop();
+                //var elapsedMs = watch.ElapsedMilliseconds;
+                //await Application.Current.MainPage.DisplayAlert("Информация", (elapsedMs / 1000.0).ToString() + "s", "ОК");
+
+            }
             if (!button.Text.StartsWith("Пиццы")) codes.Type = button.Text;
             else codes.Type = "Пиццы";
             await codes.WriteParams();
             RaisePropertyChanged("Codes");
+
         }
     }
 }

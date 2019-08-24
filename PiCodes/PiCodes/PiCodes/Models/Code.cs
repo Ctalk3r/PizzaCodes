@@ -14,6 +14,8 @@ namespace PiCodes.Models
     {
         private string name, shortName, note;
 
+        private bool pizzaFlg = false, discountFlg = false, otherFlg = false; 
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void RaisePropertyChanged([CallerMemberName]string propertyName = null)
@@ -70,17 +72,17 @@ namespace PiCodes.Models
 
         public bool IsPizza()
         {
-            return FullInfo.Contains("ТРАД") || FullInfo.Contains("ТОНК");
+            return pizzaFlg;
         }
 
         public bool IsDiscount()
         {
-            return FullInfo.Contains("%");
+            return discountFlg;
         }
 
         public bool IsSmthElse()
         {
-            return !IsPizza() && !IsDiscount();
+            return otherFlg;
         }
 
         public string GetInfo(bool shortInfo)
@@ -99,6 +101,9 @@ namespace PiCodes.Models
             Name = string.Join("\n", temp);
             ShortName = temp.OrderBy((x) => x.Length).ToList()[0];
             Note = note;
+            if (Note.Contains("ТРАД") || Note.Contains("ТОНК")) pizzaFlg = true;
+            else if (Note.Contains("%")) discountFlg = true;
+            else otherFlg = true;
             Price = double.Parse(FullInfo.Substring(FullInfo.LastIndexOf("От", StringComparison.InvariantCultureIgnoreCase) + 3,
                                  FullInfo.LastIndexOf("руб", StringComparison.InvariantCultureIgnoreCase) -
                                 (FullInfo.LastIndexOf("От", StringComparison.InvariantCultureIgnoreCase) + 4)).Replace(',','.'), CultureInfo.InvariantCulture);

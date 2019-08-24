@@ -1,8 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:PiCodes"
              x:Class="PiCodes.Views.MainDetailPage"
              Title="{Binding Codes.Type}">
+    <ContentPage.Resources>
+        <conv:CodeToIconConverter x:Key="IconConverter" />
+    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="{Binding SortIcon}" Command="{Binding SortCommand}"/>
     </ContentPage.ToolbarItems>
@@ -20,7 +24,7 @@
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Orientation="Horizontal" Margin="8, 0, 10, 0">
-                            <Image Source="launcher_foreground" WidthRequest="45" HeightRequest="60"/>
+                            <Image Source="{Binding FullInfo, Converter={StaticResource IconConverter}}" WidthRequest="45" HeightRequest="60"/>
                             <StackLayout Spacing="1" Margin="5, 4, 0, 8">
                                 <Label Text="{Binding ShortName}" FontSize="18" FontAttributes="Bold"/>
                                 <Label Text="{Binding ShortInfo}" />

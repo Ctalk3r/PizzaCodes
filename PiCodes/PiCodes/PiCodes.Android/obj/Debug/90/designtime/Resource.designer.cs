@@ -7084,8 +7084,8 @@ namespace PiCodes.Droid
 			// aapt resource value: 0x7F090054
 			public const int abc_vector_test = 2131296340;
 			
-			// aapt resource value: 0x7F010315
-			public const int ad16 = 2130772757;
+			// aapt resource value: 0x7F010318
+			public const int ad16 = 2130772760;
 			
 			// aapt resource value: 0x7F090055
 			public const int avd_hide_password = 2131296341;
@@ -7093,8 +7093,8 @@ namespace PiCodes.Droid
 			// aapt resource value: 0x7F090056
 			public const int avd_show_password = 2131296342;
 			
-			// aapt resource value: 0x7F010316
-			public const int calendar_bg_selector = 2130772758;
+			// aapt resource value: 0x7F010319
+			public const int calendar_bg_selector = 2130772761;
 			
 			// aapt resource value: 0x7F090057
 			public const int design_bottom_navigation_item_background = 2131296343;
@@ -7766,10 +7766,19 @@ namespace PiCodes.Droid
 			public const int notify_panel_notification_icon_bg = 2131296268;
 			
 			// aapt resource value: 0x7F010004
-			public const int sort_by_ascending = 2130771972;
+			public const int otherFoodLogo = 2130771972;
 			
 			// aapt resource value: 0x7F010005
-			public const int sort_by_descending = 2130771973;
+			public const int percentLogo = 2130771973;
+			
+			// aapt resource value: 0x7F010006
+			public const int pizzaLogo = 2130771974;
+			
+			// aapt resource value: 0x7F010007
+			public const int sort_by_ascending = 2130771975;
+			
+			// aapt resource value: 0x7F010008
+			public const int sort_by_descending = 2130771976;
 			
 			// aapt resource value: 0x7F09006F
 			public const int tooltip_frame_dark = 2131296367;

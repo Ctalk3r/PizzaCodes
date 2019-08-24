@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:PiCodes.Models;assembly=PiCodes"
              xmlns:views="clr-namespace:PiCodes.Views"
-             x:Class="PiCodes.MainPage">
+                  x:Class="PiCodes.MainPage">
 
     <MasterDetailPage.Resources>
         <ResourceDictionary>
