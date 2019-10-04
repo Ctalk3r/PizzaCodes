@@ -1,0 +1,9 @@
+.vs/
+.gradle/
+.idea/
+*.suo
+*.user
+*.nupkg
+*.dll
+obj/
+bin/
