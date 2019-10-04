@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:PiCodes.Models"
+             x:Class="PiCodes.Views.MainMasterPage"
+             IconImageSource="update_icon.png"
+			 Title="Personal Organiser">
+    <ContentPage.Content>
+        <FlexLayout Direction="Column" Padding="20,0,0,0" AlignContent="SpaceBetween">
+            <Image Margin="-20,0,0,0" Source="master_page_background" Aspect="Fill" HeightRequest="220"/>
+            <local:ButtonWithAlignment Text="Все"/>
+            <local:ButtonWithAlignment Text="Пиццы"/>
+            <local:ButtonWithAlignment Text="Скидки"/>
+            <local:ButtonWithAlignment Text="Другая еда"/>
+            <Picker
+                SelectedIndex="0"
+                ItemsSource="{Binding Codes.CityList}"
+                BackgroundColor="Transparent"
+                TextColor="#0F0F0F"
+                FontSize="28"
+                FontAttributes="Bold"
+                Margin="0, 10, 0, 10"/>
+        </FlexLayout>
+    </ContentPage.Content>
+</ContentPage>

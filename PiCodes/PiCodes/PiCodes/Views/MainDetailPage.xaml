@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PiCodes.Views.MainDetailPage"
+             Title=" ">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="{Binding SortIcon}" Command="{Binding SortCommand}"/>
+    </ContentPage.ToolbarItems>
+    <StackLayout>
+        <ListView x:Name="codesCollection" 
+                                HasUnevenRows="True"
+                                ItemsSource="{Binding Codes}" 
+                                IsPullToRefreshEnabled="True"
+                                RefreshCommand="{Binding RefreshButtonCommand}"
+                                IsRefreshing="{Binding Codes.IsRefreshing}"
+                                SeparatorColor="Black"
+                                RefreshControlColor="Black"
+                                ItemTapped="DisplayCode">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.View>
+                            <StackLayout>
+                                <Label Text="{Binding Path=Name}"
+                                                       HeightRequest="50"
+                                                       VerticalOptions="Center"
+                                                       HorizontalOptions="Center"
+                                                       FontSize="Large"
+                                                       TextColor="Black"
+                                                       FontAttributes="Bold"/>
+                            </StackLayout>
+                        </ViewCell.View>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>
