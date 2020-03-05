@@ -132,7 +132,7 @@ namespace PiCodes.ViewModels
             if (picker == null) return;
             string city = (string)picker.SelectedItem;
             codes.CurrentCity = city;
-            MasterMenuClicked(new Button() { Text = codes.Type + (codes.Type == "Пиццы" ? codes.Diameter : "") });
+            MasterMenuClicked(new Button() { Text = codes.Type + (codes.Type == "Пиццы" ? codes.Diameter : ""), StyleId = "Yes" });
         }
         private async void OnRefreshButtonClicked(object sender)
         {
@@ -177,7 +177,7 @@ namespace PiCodes.ViewModels
                 if (button.Text.Length == 5) diameter = await Application.Current.MainPage.DisplayActionSheet("Выберите размер", "Отмена", "", "Все диаметры", "23см", "30см", "35см", "40см");
                 else
                     diameter = button.Text.Substring(5, button.Text.Length - 5);
-                if (diameter == "Отмена") return;
+                if (diameter == "Отмена" || diameter == null || diameter == "") return;
                 codes.Clear();
                 codes.Diameter = diameter;
 
@@ -227,7 +227,7 @@ namespace PiCodes.ViewModels
                     }
             }
 
-            if (Xamarin.Forms.Application.Current.MainPage is MasterDetailPage masterDetailPage)
+            if (Xamarin.Forms.Application.Current.MainPage is MasterDetailPage masterDetailPage && button.StyleId != "Yes")
             {
                 masterDetailPage.IsPresented = false;
                 //watch.Stop();

@@ -114,12 +114,13 @@ namespace PiCodes.Models
                 Diameter = FullInfo.Substring(FullInfo.IndexOf("ТРАД", StringComparison.InvariantCultureIgnoreCase) - 2, 2) + "см";
             else Diameter = FullInfo.Substring(FullInfo.IndexOf("ТОНК", StringComparison.InvariantCultureIgnoreCase) - 2, 2) + "см";
 
-            City = FullInfo.Substring(FullInfo.LastIndexOf("-", StringComparison.InvariantCultureIgnoreCase) + 2).Split(',', '.');
+            City = FullInfo.Substring(FullInfo.LastIndexOf("-", StringComparison.InvariantCultureIgnoreCase) + 1).Split(',', '.');
             for (int i = 0; i < City.Count(); i++)
                 City[i] = City[i].Trim();
 
             ShortInfo = Note.Substring(0, Note.IndexOf("-", StringComparison.InvariantCultureIgnoreCase));
             //ShortInfo = ShortInfo.Length < 25 ? ShortInfo : ShortInfo.Substring(0, 25) + "...";
+
         }
     }
 }

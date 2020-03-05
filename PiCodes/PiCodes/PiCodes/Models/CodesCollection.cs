@@ -22,6 +22,7 @@ namespace PiCodes.Models
     {
         public static string RequestAdress = "https://www.papajohns.by/api/stock/codes";
         public ObservableCollection<string> CityList { get; set; }
+        public string CombinedType => Type + (Type == "Пиццы" && Diameter.Length == 4 ? " " + Diameter : "");
         public List<Code> SaveCodes;
         public List<Code> ReverseCodes;
         protected override event PropertyChangedEventHandler PropertyChanged;
@@ -167,7 +168,8 @@ namespace PiCodes.Models
            await Task.Run(() =>
            {
                string output;
-               string pattern = @"""name"":""\d* - ";
+
+               string pattern = @"""name"":""\d*[ ]?-[ ]?";
                Regex reg = new Regex(pattern);
                output = reg.Replace(match.Value, "");
                pattern = @"[^-]*- ";
@@ -226,6 +228,7 @@ namespace PiCodes.Models
                     CurrentCity = parameters[0];
                     Type = parameters[1];
                     RaisePropertyChanged("Type");
+                    RaisePropertyChanged("CombinedType");
                     Diameter = parameters[2];
                 }
 

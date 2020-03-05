@@ -1,0 +1,16 @@
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\bin\Release\netstandard2.0\PiCodes.deps.json
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\bin\Release\netstandard2.0\PiCodes.dll
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\bin\Release\netstandard2.0\ref\PiCodes.dll
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\bin\Release\netstandard2.0\PiCodes.pdb
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\obj\Release\netstandard2.0\App.xaml.g.cs
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\obj\Release\netstandard2.0\Views\MainDetailPage.xaml.g.cs
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\obj\Release\netstandard2.0\Views\MainMasterPage.xaml.g.cs
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\obj\Release\netstandard2.0\Views\MainPage.xaml.g.cs
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\obj\Release\netstandard2.0\PiCodes.csproj.CoreCompileInputs.cache
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\obj\Release\netstandard2.0\PiCodes.AssemblyInfoInputs.cache
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\obj\Release\netstandard2.0\PiCodes.AssemblyInfo.cs
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\obj\Release\netstandard2.0\PiCodes.dll
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\obj\Release\netstandard2.0\ref\PiCodes.dll
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\obj\Release\netstandard2.0\PiCodes.pdb
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\obj\Release\netstandard2.0\XamlC.stamp
+D:\PizzaCodes\PiCodes\PiCodes\PiCodes\obj\Release\netstandard2.0\PiCodes.csprojAssemblyReference.cache

@@ -15,8 +15,6 @@ using PiCodes;
 using PiCodes.Droid;
 using PiCodes.Models;
 using System.ComponentModel;
-using XLabs.Forms.Controls;
-using XLabs.Forms.Extensions;
 
 [assembly: ExportRenderer(typeof(BorderlessPicker), typeof(BorderlessPickerRenderer))]
 namespace PiCodes.Droid

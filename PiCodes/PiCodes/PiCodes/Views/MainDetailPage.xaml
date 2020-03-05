@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:conv="clr-namespace:PiCodes"
              x:Class="PiCodes.Views.MainDetailPage"
-             Title="{Binding Codes.Type}">
+             Title="{Binding Codes.CombinedType}">
     <ContentPage.Resources>
         <conv:CodeToIconConverter x:Key="IconConverter" />
     </ContentPage.Resources>

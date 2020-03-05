@@ -5,7 +5,8 @@
              xmlns:behaviors="clr-namespace:Behaviors;assembly=Behaviors"
              x:Class="PiCodes.Views.MainMasterPage"
              IconImageSource="update_icon.png"
-			 Title="Personal Organiser">
+			 Title=" "
+             BackgroundColor="White">
     <ContentPage.Content>
         <StackLayout Spacing="-12" Padding="-10, 0, -10, 0">
             <Image Margin="0, 0, 0, 5" Source="master_page_background" Aspect="Fill" HeightRequest="220"/>
@@ -20,11 +21,11 @@
                 ItemsSource="{Binding Codes.CityList}"
                 SelectedItem="{Binding Codes.CurrentCity}"
                 WidthRequest="262"
-                BackgroundColor="Transparent"
+                BackgroundColor="White"
                 TextColor="#0F0F0F"
                 FontSize="28"
                 FontAttributes="Bold"
-                Margin="-5, 10, 0, 10">
+                Margin="20, 10, 20, 10">
                 <Picker.Behaviors>
                     <behaviors:EventHandlerBehavior EventName="SelectedIndexChanged">
                         <behaviors:InvokeCommandAction Command="{Binding SelectCityCommand}" CommandParameter="{Reference picker}"/>
